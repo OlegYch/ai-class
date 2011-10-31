@@ -14,8 +14,9 @@ object spam extends App {
     , "sports costs money")
   val m = List(
     //    "sports"
-    "secret is secret"
-    //    "today is secret"
+    //    "secret is secret"
+    //    "today"
+    "today is secret"
   )
 
   val bd = BigDecimal
@@ -47,13 +48,21 @@ object spam extends App {
 
   val k = 1
 
-  def `ls(s)`(p: bd, s: bd) = (s + k) / (p + k * 2)
+  def `ls(_)`(p: bd, s: bd) = (s + k) / (p + k * 2)
 
   //  println(`ls(s)`(1, 1))
   //  println(`ls(s)`(10, 6))
   //  println(`ls(s)`(100, 60))
-  println(`ls(s)`((s ++ h).size, s.size))
-  println(`ls(s)`((s ++ h).size, h.size))
-  println(`ls(m|_)`("today" :: Nil)(s, s ++ h)(k))
-  println(`ls(m|_)`("today" :: Nil)(h, s ++ h)(k))
+  val `ls(s)` = `ls(_)`((s ++ h).size, s.size)
+  val `ls(h)` = `ls(_)`((s ++ h).size, h.size)
+  println(`ls(s)`)
+  println(`ls(h)`)
+
+  val `ls(m|s)` = `ls(m|_)`(m)(s, s ++ h)(k)
+  val `ls(m|h)` = `ls(m|_)`(m)(h, s ++ h)(k)
+
+  println(`ls(m|s)`)
+  println(`ls(m|h)`)
+  val `ls(s|m)` = `ls(m|s)` * `ls(s)` / (`ls(m|s)` * `ls(s)` + `ls(m|h)` * `ls(h)`)
+  println(`ls(s|m)`)
 }
