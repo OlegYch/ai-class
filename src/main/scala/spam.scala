@@ -18,14 +18,37 @@ object spam extends App {
     "today is secret"
   )
 
+  val movie = List(
+    "a perfect world"
+    , "my perfect woman"
+    , "pretty woman"
+  )
+  val song = List(
+    "a perfect day"
+    , "electric storm"
+    , "another rainy day"
+  )
+  val allTitles = movie ++ song
+  val query = "perfect storm"
   val bd = BigDecimal
   type bd = BigDecimal
+
+  var variables = Map[String, bd]()
+
+  implicit def withAssignemnt(b: bd) = new {
+    def =:(s: String) {
+      variables += s -> b
+      println("%s = %s".format(s, b))
+    }
+  }
+
+  implicit def fromVars(s: String): bd = variables(s)
 
   implicit def withWords(s: String) = new {def words = StringUtils.split(s)}
 
   implicit def withDict(s: Seq[String]) = new {def dict = s.flatMap(_.words).groupBy(identity).map {case (s, l) => (s, bd(l.size))}.toMap.withDefaultValue(bd(0))}
 
-  println((s ++ h).dict)
+  //  println((s ++ h).dict)
 
   val `p(s)` = bd(s.size) / (s ++ h).size
   val `p(h)` = bd(h.size) / (s ++ h).size
@@ -41,11 +64,12 @@ object spam extends App {
   val `p(m|h)` = `p(m|_)`(h)
   val `p(m|s)` = `p(m|_)`(s)
   val `p(s|m)` = `p(m|s)` * `p(s)` / (`p(m|s)` * `p(s)` + `p(m|h)` * `p(h)`)
-  println(`p(m|h)`)
-  println(`p(m|s)`)
-  println(`p(s|m)`)
+  //  println(`p(m|h)`)
+  //  println(`p(m|s)`)
+  //  println(`p(s|m)`)
 
-  val k = 1
+  val k = 0
+  //  val k = 1
 
   def `ls(_)`(p: bd, s: bd) = (s + k) / (p + k * 2)
 
@@ -54,14 +78,26 @@ object spam extends App {
   //  println(`ls(s)`(100, 60))
   val `ls(s)` = `ls(_)`((s ++ h).size, s.size)
   val `ls(h)` = `ls(_)`((s ++ h).size, h.size)
-  println(`ls(s)`)
-  println(`ls(h)`)
+  "ls(movie)" =: `ls(_)`(allTitles.size, movie.size)
+  "ls(song)" =: `ls(_)`(allTitles.size, song.size)
+  //  println(`ls(s)`)
+  //  println(`ls(h)`)
 
   val `ls(m|s)` = `ls(m|_)`(m)(s, s ++ h)(k)
   val `ls(m|h)` = `ls(m|_)`(m)(h, s ++ h)(k)
 
-  println(`ls(m|s)`)
-  println(`ls(m|h)`)
+  for (clazz <- List("movie" -> movie, "song" -> song)) {
+    for (w <- query.words) {
+      "ls(%s|%s)".format(w, clazz._1) =: `ls(m|_)`(w :: Nil)(clazz._2, allTitles)(k)
+    }
+    "ls(query|%s)".format(clazz._1) =: `ls(m|_)`(query :: Nil)(clazz._2, allTitles)(k)
+  }
+
+  //  println(`ls(m|s)`)
+  //  println(`ls(m|h)`)
   val `ls(s|m)` = `ls(m|s)` * `ls(s)` / (`ls(m|s)` * `ls(s)` + `ls(m|h)` * `ls(h)`)
-  println(`ls(s|m)`)
+  "ls(movie|query)" =: ("ls(query|movie)": bd) * "ls(movie)" / (("ls(query|movie)": bd) * "ls(movie)" + ("ls(query|song)": bd) * "ls(song)")
+
+  //  println(`ls(s|m)`)
+
 }
