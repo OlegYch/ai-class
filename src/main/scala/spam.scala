@@ -1,4 +1,3 @@
-import java.lang.String
 import org.apache.commons.lang.StringUtils
 
 object spam extends App {
