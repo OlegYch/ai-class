@@ -1,6 +1,6 @@
 import org.apache.commons.lang.StringUtils
 
-object spam extends App {
+object spam extends App with BigDecimalCalculus {
   val s = List(
     "offer is secret"
     , "click secret link"
@@ -30,19 +30,6 @@ object spam extends App {
   )
   val allTitles = movie ++ song
   val query = "perfect storm"
-  val bd = BigDecimal
-  type bd = BigDecimal
-
-  var variables = Map[String, bd]()
-
-  implicit def withAssignemnt(b: bd) = new {
-    def =:(s: String) {
-      variables += s -> b
-      println("%s = %s".format(s, b))
-    }
-  }
-
-  implicit def fromVars(s: String): bd = variables(s)
 
   implicit def withWords(s: String) = new {def words = StringUtils.split(s)}
 
@@ -96,7 +83,7 @@ object spam extends App {
   //  println(`ls(m|s)`)
   //  println(`ls(m|h)`)
   val `ls(s|m)` = `ls(m|s)` * `ls(s)` / (`ls(m|s)` * `ls(s)` + `ls(m|h)` * `ls(h)`)
-  "ls(movie|query)" =: ("ls(query|movie)": bd) * "ls(movie)" / (("ls(query|movie)": bd) * "ls(movie)" + ("ls(query|song)": bd) * "ls(song)")
+  "ls(movie|query)" =: "ls(query|movie)".bd * "ls(movie)" / ("ls(query|movie)".bd * "ls(movie)" + "ls(query|song)".bd * "ls(song)")
 
   //  println(`ls(s|m)`)
 
