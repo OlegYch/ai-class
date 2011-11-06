@@ -1,5 +1,6 @@
 object gaussian extends App with BigDecimalCalculus {
-  val data: Seq[bd] = Seq(3, 9, 9, 3)
+  override type bd = BigDecimal
+  val data = Seq[bd](3, 9, 9, 3)
   //  val data: Seq[bd] = Seq(3, 4, 5, 6, 7)
   val m: bd = data.size
   "mu" =: 1 / m * (data.sum)

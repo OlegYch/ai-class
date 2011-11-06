@@ -1,6 +1,9 @@
 import org.apache.commons.lang.StringUtils
 
 object spam extends App with BigDecimalCalculus {
+  type bd = BigDecimal
+  val bd = BigDecimal
+
   val s = List(
     "offer is secret"
     , "click secret link"

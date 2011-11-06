@@ -1,6 +1,5 @@
 trait BigDecimalCalculus {
-  val bd = BigDecimal
-  type bd = BigDecimal
+  type bd
 
   implicit def toVariable(s: Symbol) = Variable(s.name)
 
