@@ -31,13 +31,10 @@ object propositional extends App with SymbolicVariables {
       result
     }
 
-    lazy val eval = {
-      for (s <- (0 to vars.size); answer <- vars.toStream.combinations(s).map {
-        trueVars =>
-          implicit val varsMap = vars.map(v => v -> trueVars.contains(v)).toMap
-          (varsMap, toBoolean())
-      }) yield answer
-    }
+    lazy val inputs = for (s <- (0 to vars.size); trueVars <- vars.toStream.combinations(s))
+    yield vars.map(v => v -> trueVars.contains(v)).toMap
+
+    lazy val eval = inputs.map {varsMap => (varsMap, toBoolean()(varsMap))}
 
     lazy val valid = eval.collectFirst {case (_, false) =>}.isEmpty
     lazy val satisfiable = !valid && eval.collectFirst {case (_, true) =>}.isDefined
