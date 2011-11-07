@@ -13,8 +13,10 @@ object propositional extends App with SymbolicVariables {
     def V(r: Var) = new V(this, r)
 
     def unary_! = new !(this)
+  }
 
-    def toBoolean(v: Var = this)(implicit dict: Map[Var, Boolean]): Boolean = v match {
+  class Eval(variable: Var) {
+    def toBoolean(v: Var = variable)(implicit dict: Map[Var, Boolean]): Boolean = v match {
       case v@(==>(l, r)) => v(toBoolean(l) -> toBoolean(r))
       case v@(<==>(l, r)) => v(toBoolean(l) -> toBoolean(r))
       case v@(V(l, r)) => v(toBoolean(l) -> toBoolean(r))
@@ -25,7 +27,7 @@ object propositional extends App with SymbolicVariables {
       case v: VarConst => dict(v)
     }
 
-    lazy val vars = {
+    val vars = {
       var result = Set[Var]()
       toBoolean()(Map.empty.withDefault(v => {result += v; false}))
       result
@@ -41,8 +43,12 @@ object propositional extends App with SymbolicVariables {
     lazy val unSatisfiable = eval.collectFirst {case (_, true) =>}.isEmpty
     lazy val `true` = valid
     lazy val `false` = unSatisfiable
-    lazy val `?` = satisfiable
+    lazy val ? = satisfiable
+
+    override def toString = variable.toString
   }
+
+  implicit def toEval(v: Var) = new Eval(v)
 
   abstract class VarImpl(val s: Symbol) extends Var {
     override def toString = s.name
@@ -102,9 +108,9 @@ object propositional extends App with SymbolicVariables {
     def apply(p: Boolean) = !p
   }
 
-  def inspect(v: Var) = {
+  def inspect(v: Eval) = {
     def toS(b: Boolean) = (if (b) "*" else "\t") + "\t"
-    (v.`true` :: v.`false` :: v.`?` :: Nil).map(toS).mkString("") + v.toString
+    (v.`true` :: v.`false` :: v.? :: Nil).map(toS).mkString("") + v.toString
   }
 
   val Smoke = 'Smoke
@@ -121,7 +127,12 @@ object propositional extends App with SymbolicVariables {
   compare('Cc A 'Bci A 'Bcs, 'Cc ==> ('Bci A 'Bcs))
   compare(('Cx A 'Cy A 'Bxy) ==> !'Mc, !'Cx V !'Cy V !'Bxy V !'Mc)
 
-  def compare(v1: Var, v2: Var) {
+  compare("open" <==> ("dial" V ("already open" A "not lock")), "open" <==> ("dial" A "not lock"))
+
+  def compare(_v1: Var, _v2: Var) {
+    val allVars = (_v1.vars ++ _v2.vars).toSet
+    val v1 = new Eval(_v1) {override val vars = allVars}
+    val v2 = new Eval(_v2) {override val vars = allVars}
     println(inspect(v1))
     println(v1.eval)
     println(inspect(v2))
