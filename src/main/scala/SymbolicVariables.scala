@@ -1,4 +1,4 @@
-trait BigDecimalCalculus {
+trait SymbolicVariables {
   type bd
 
   implicit def toVariable(s: Symbol) = Variable(s.name)
@@ -9,9 +9,13 @@ trait BigDecimalCalculus {
 
   case class Variable(name: String) {
     def bd: bd = variables(name)
+
+    override def toString = name
   }
 
-  var variables = Map[Variable, bd]()
+  def default: (Variable) => bd = (v) => sys.error("%s was not defined".format(v))
+
+  var variables = Map[Variable, bd]().withDefault(default)
 
   implicit def withAssignment(b: bd) = new {
     def =:(s: Variable) {

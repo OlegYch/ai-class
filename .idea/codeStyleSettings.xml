@@ -6,6 +6,7 @@
         <option name="LINE_SEPARATOR" value="&#10;" />
         <ScalaCodeStyleSettings>
           <option name="ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY" value="true" />
+          <option name="ADD_FULL_QUALIFIED_IMPORTS" value="true" />
         </ScalaCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />

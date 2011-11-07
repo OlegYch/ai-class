@@ -1,6 +1,6 @@
 import org.apache.commons.lang.StringUtils
 
-object spam extends App with BigDecimalCalculus {
+object spam extends App with SymbolicVariables {
   type bd = BigDecimal
   val bd = BigDecimal
 

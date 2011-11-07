@@ -1,4 +1,4 @@
-object gaussian extends App with BigDecimalCalculus {
+object gaussian extends App with SymbolicVariables {
   override type bd = BigDecimal
   val data = Seq[bd](3, 9, 9, 3)
   //  val data: Seq[bd] = Seq(3, 4, 5, 6, 7)

@@ -1,8 +1,7 @@
-import collection.mutable.Map
+object propositional extends App with SymbolicVariables {
+  type bd = Var
 
-object propositional extends App {
-
-  implicit def toVar(s: Symbol) = VarConst(s)
+  override def default = (v) => VarConst(Symbol(v))
 
   sealed trait Var {
     def ==>(r: Var) = new ==>(this, r)
@@ -15,7 +14,7 @@ object propositional extends App {
 
     def unary_! = new !(this)
 
-    def toBoolean(v: Var = this)(implicit dict: collection.Map[Var, Boolean]): Boolean = v match {
+    def toBoolean(v: Var = this)(implicit dict: Map[Var, Boolean]): Boolean = v match {
       case v@(==>(l, r)) => v(toBoolean(l) -> toBoolean(r))
       case v@(<==>(l, r)) => v(toBoolean(l) -> toBoolean(r))
       case v@(V(l, r)) => v(toBoolean(l) -> toBoolean(r))
@@ -117,6 +116,7 @@ object propositional extends App {
   val Dumb = 'Dumb
   println("True\tFalse\t?\t")
   println(inspect((Smoke ==> Fire) <==> (Smoke V !Fire)))
+  println(inspect((Smoke ==> Fire) <==> (Smoke V !Fire)))
   println(inspect((Smoke ==> Fire) <==> (!Smoke ==> !Fire)))
   println(inspect((Smoke ==> Fire) <==> (!Fire ==> !Smoke)))
   println(inspect(Big V Dumb V (Big ==> Dumb)))
@@ -131,6 +131,6 @@ object propositional extends App {
     println(v2.eval)
     println("Diff:")
     println(v1.eval == v2.eval)
-    println(v1.eval.toSet -- v2.eval.toSet mkString("\n"))
+    println(v1.eval.toSet -- v2.eval.toSet mkString ("\n"))
   }
 }
