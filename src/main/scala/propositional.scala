@@ -121,4 +121,16 @@ object propositional extends App {
   println(inspect((Smoke ==> Fire) <==> (!Fire ==> !Smoke)))
   println(inspect(Big V Dumb V (Big ==> Dumb)))
   println(inspect((Big A Dumb) <==> !(!Big V !Dumb)))
+  compare('Cc A 'Bci A 'Bcs, 'Cc ==> ('Bci A 'Bcs))
+  compare(('Cx A 'Cy A 'Bxy) ==> !'Mc, !'Cx V !'Cy V !'Bxy V !'Mc)
+
+  def compare(v1: Var, v2: Var) {
+    println(inspect(v1))
+    println(v1.eval)
+    println(inspect(v2))
+    println(v2.eval)
+    println("Diff:")
+    println(v1.eval == v2.eval)
+    println(v1.eval.toSet -- v2.eval.toSet mkString("\n"))
+  }
 }
