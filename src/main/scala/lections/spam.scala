@@ -1,4 +1,7 @@
+package lections
+
 import org.apache.commons.lang.StringUtils
+import utils.SymbolicVariables
 
 object spam extends App with SymbolicVariables {
   type bd = BigDecimal
@@ -90,8 +93,8 @@ object spam extends App with SymbolicVariables {
 
   //  println(`ls(s|m)`)
 
-  val p  = "rssss"
-  val pp = p.zip(p.tail) map  {case (a,b) => a.toString+b}
-  "p(r0)" =: `ls(m)`("r", "r" :: Nil dict,"r s" :: Nil dict)(1)
-  "p(s|s)" =: `ls(m|_)`("ss" :: Nil)(pp.filter(_.startsWith("s")),pp)(1)
+  val p = "rssss"
+  val pp = p.zip(p.tail) map {case (a, b) => a.toString + b}
+  "p(r0)" =: `ls(m)`("r", "r" :: Nil dict, "r s" :: Nil dict)(1)
+  "p(s|s)" =: `ls(m|_)`("ss" :: Nil)(pp.filter(_.startsWith("s")), pp)(1)
 }

@@ -1,3 +1,7 @@
+package lections
+
+import utils.SymbolicVariables
+
 object propositional extends App with SymbolicVariables {
   type bd = Var
 

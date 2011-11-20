@@ -1,3 +1,7 @@
+package lections
+
+import utils.SymbolicVariables
+
 object gaussian extends App with SymbolicVariables {
   override type bd = BigDecimal
   val data = Seq[bd](3, 9, 9, 3)

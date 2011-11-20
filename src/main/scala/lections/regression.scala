@@ -1,3 +1,5 @@
+package lections
+
 object regression extends App {
   val bd = BigDecimal
   type bd = BigDecimal

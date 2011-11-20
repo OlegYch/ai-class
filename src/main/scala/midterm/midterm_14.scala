@@ -1,6 +1,6 @@
 package midterm
 
-import mdp.mdp
+import lections.mdp
 import scala.collection.immutable.TreeMap
 
 

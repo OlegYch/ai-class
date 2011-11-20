@@ -1,7 +1,6 @@
-package mdp
+package lections
 
 import scala.collection.immutable.TreeMap
-
 
 class mdp {
   type P = (Char, Int)

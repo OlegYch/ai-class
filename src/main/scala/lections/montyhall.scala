@@ -1,3 +1,5 @@
+package lections
+
 object montyhall extends App {
   val choices = 0 until 3
   val samples = 0 to 10000

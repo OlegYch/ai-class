@@ -1,3 +1,5 @@
+package utils
+
 trait SymbolicVariables {
   type bd
 
