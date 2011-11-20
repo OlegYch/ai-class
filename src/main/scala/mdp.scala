@@ -3,7 +3,7 @@ package mdp
 import scala.collection.immutable.TreeMap
 
 
-object mdp extends App {
+class mdp {
   type P = (Char, Int)
   type V = BigDecimal
   type A = Symbol
@@ -16,20 +16,19 @@ object mdp extends App {
 
   case class Space(positions: Map[P, (V, Option[A])])
 
-  val Death = ('b', 1)
-  val Goal = ('b', 4)
-  val terminalPositions = Set(Death, Goal)
-  val initialSpace = Space(TreeMap((for (y <- ('a' to 'b'); x <- (1 to 4)) yield {
+  lazy val Death = ('b', 1)
+  lazy val Goal = ('b', 4)
+  lazy val terminalPositions = Set(Death, Goal)
+  lazy val initialSpace = Space(TreeMap((for (y <- ('a' to 'b'); x <- (1 to 4)) yield {
     (y, x) match {
       case p@Death => p -> (-100.v -> None)
       case p@Goal => p -> (100.v -> None)
       case p => p -> (0.v -> None)
     }
   }): _*))
-  println(initialSpace)
-  val directions = List('N ->(-1, 0), 'S ->(1, 0), 'W ->(0, -1), 'E ->(0, 1))
-  val p = 0.8.v
-  val cost = -4.v
+  lazy val directions = List('N ->(-1, 0), 'S ->(1, 0), 'W ->(0, -1), 'E ->(0, 1))
+  lazy val p = 0.8.v
+  lazy val cost = -4.v
 
   def modifyPosition(dp: (Int, Int)): (P => P) = p => {
     if (terminalPositions.contains(p)) {
@@ -43,12 +42,11 @@ object mdp extends App {
     }
   }
 
-  val actions = directions.map(d => {
+  lazy val actions = directions.map(d => {
     val (name, dp) = d
     val inverseDp = (dp._1 * -1, dp._2 * -1)
     Action(name, List(modifyPosition(dp) -> p, modifyPosition(inverseDp) -> (1 - p)))
   })
-  println(actions)
 
   def updateSpaceValues(p: P, s: Space): Space = {
     if (terminalPositions.contains(p)) {
@@ -67,12 +65,20 @@ object mdp extends App {
     }
   }
 
-  var finalSpace = initialSpace
-  for (i <- 0 to 100) {
-    finalSpace.positions.keys.foreach {
-      p =>
-        finalSpace = updateSpaceValues(p, finalSpace)
+  def iterate = {
+    println(initialSpace)
+    println(actions)
+    var finalSpace = initialSpace
+    for (i <- 0 to 100) {
+      finalSpace.positions.keys.foreach {
+        p =>
+          finalSpace = updateSpaceValues(p, finalSpace)
+      }
     }
+    println(finalSpace)
   }
-  println(finalSpace)
+}
+
+object mdp extends mdp with App {
+  iterate
 }
