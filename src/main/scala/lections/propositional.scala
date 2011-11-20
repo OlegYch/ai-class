@@ -121,7 +121,10 @@ object propositional extends App with SymbolicVariables {
   val Fire = 'Fire
   val Big = 'Big
   val Dumb = 'Dumb
-  println("True\tFalse\t?\t")
+
+  def header = println("True\tFalse\t?\t")
+
+  header
   println(inspect((Smoke ==> Fire) <==> (Smoke V !Fire)))
   println(inspect((Smoke ==> Fire) <==> (Smoke V !Fire)))
   println(inspect((Smoke ==> Fire) <==> (!Smoke ==> !Fire)))
