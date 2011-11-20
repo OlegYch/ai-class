@@ -20,9 +20,10 @@ trait SymbolicVariables {
   var variables = Map[Variable, bd]().withDefault(default)
 
   implicit def withAssignment(b: bd) = new {
-    def =:(s: Variable) {
+    def =:(s: Variable) = {
       variables += s -> b
       println("%s = %s".format(s, b))
+      b
     }
   }
 
