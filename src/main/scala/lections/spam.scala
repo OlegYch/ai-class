@@ -61,10 +61,10 @@ object spam extends App with SymbolicVariables {
   //  println(`p(m|s)`)
   //  println(`p(s|m)`)
 
-  val k = 0
-  //  val k = 1
+  //  val k = 0
+  val k = 1
 
-  def `ls(_)`(p: bd, s: bd) = (s + k) / (p + k * 2)
+  def `ls(_)`(p: bd, s: bd, k: bd = k) = (s + k) / (p + k * 2)
 
   //  println(`ls(s)`(1, 1))
   //  println(`ls(s)`(10, 6))
