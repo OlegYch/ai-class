@@ -54,12 +54,12 @@ object mdp extends App {
     if (terminalPositions.contains(p)) {
       s
     } else {
-      val probableRewards = actions.flatMap {
+      val probableRewards = actions.map {
         case Action(name, transitions) => {
-          val reward = transitions.flatMap {
-            case (t, probability) => Some(s.positions(t(p))._1 * probability)
+          val reward = transitions.map {
+            case (t, probability) => s.positions(t(p))._1 * probability
           }.sum
-          Some(name -> (reward + cost))
+          name -> (reward + cost)
         }
       }
       val bestActionReward = probableRewards.maxBy(_._2)
