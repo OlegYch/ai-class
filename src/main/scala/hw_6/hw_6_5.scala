@@ -23,7 +23,8 @@ object hw_6_5 extends App with SymbolicVariables {
   }
 
   val transitions = for (from <- vals; to <- vals) yield {
-    Transition(from, to)(if ((from + to toSet).size == 3) bd(0.5) else bd(0))
+    val adjacent = (from + to toSet).size == 3
+    Transition(from, to)(if (adjacent) bd(0.5) else bd(0))
   }
   for (to <- vals) {
     (to + "'") =: transitions.filter(_.to == to).map(t => t.transition.bd * t.from).sum
