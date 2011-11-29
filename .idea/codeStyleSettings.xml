@@ -7,11 +7,14 @@
         <ScalaCodeStyleSettings>
           <option name="ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY" value="true" />
           <option name="ADD_FULL_QUALIFIED_IMPORTS" value="true" />
+          <option name="PLACE_CLOSURE_PARAMETERS_ON_NEW_LINE" value="false" />
         </ScalaCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
         <codeStyleSettings language="Scala">
+          <option name="SPACE_WITHIN_METHOD_CALL_PARENTHESES" value="true" />
+          <option name="PREFER_PARAMETERS_WRAP" value="true" />
           <option name="KEEP_SIMPLE_BLOCKS_IN_ONE_LINE" value="true" />
           <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
         </codeStyleSettings>
