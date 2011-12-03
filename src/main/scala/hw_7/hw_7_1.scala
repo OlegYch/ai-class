@@ -2,40 +2,25 @@ package hw_7
 
 import utils.BigDecimalSymbolicVariables
 
-
 object hw_7_1 extends App with BigDecimalSymbolicVariables {
-  implicit def toUnit(b: Int) = new Unit(b)
-
-  case class Unit(b: BigDecimalSymbolicVariables#bd) {
-    def m = b
-    def mm = b * 1000
+  type Dim = Either[bd, pp => bd]
+  implicit def toLeft(b: bd) = Left(b)
+  implicit def toRight(b: pp => bd) = Right(b)
+  var currentProjection: pp = _
+  implicit def fromDim(b: Dim): bd = b match {case Left(b) => b; case Right(b) => b(currentProjection)}
+  case class pp(
+                 x: Dim = (p: pp) => p.X * p.f / p.Z,
+                 f: Dim = (p: pp) => p.x * p.Z / p.X,
+                 X: Dim = (p: pp) => p.x * p.Z / p.f,
+                 Z: Dim = (p: pp) => p.X * p.f / p.x
+                 ) {
+    currentProjection = this
   }
 
-  trait pp {
-    def x: bd = X * f / Z
-    def f: bd = x * Z / X
-    def X: bd = x * Z / f
-    def Z: bd = X * f / x
-  }
-
-  "X m" =: new pp {
-    override def Z = 300 m
-    override def f = 100 mm
-    override def x = 1 mm
-  }.X / (1 m)
-  "Z m" =: new pp {
-    override def X = 2 m
-    override def f = 40 mm
-    override def x = 1 mm
-  }.Z / (1 m)
-  "f mm" =: new pp {
-    override def X = 20 m
-    override def Z = 400 m
-    override def x = 1 mm
-  }.f / (1 mm)
-  "x mm" =: new pp {
-    override val X = 10 m
-    override def Z = 100 m
-    override def f = 10 mm
-  }.x / (1 mm)
+  def m = bd(1)
+  def mm = bd(1000)
+  "X m" =: pp(Z = 300 * m, f = 100 * mm, x = 1 * mm).X / m
+  "Z m" =: pp(X = 2 * m, f = 40 * mm, x = 1 * mm).Z / m
+  "f mm" =: pp(X = 20 * m, Z = 400 * m, x = 1 * mm).f / mm
+  "x mm" =: pp(X = 10 * m, Z = 100 * m, f = 10 * mm).x / mm
 }
