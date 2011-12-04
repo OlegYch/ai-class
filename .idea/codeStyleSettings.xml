@@ -8,6 +8,7 @@
           <option name="ADD_UNAMBIGIOUS_IMPORTS_ON_THE_FLY" value="true" />
           <option name="ADD_FULL_QUALIFIED_IMPORTS" value="true" />
           <option name="PLACE_CLOSURE_PARAMETERS_ON_NEW_LINE" value="false" />
+          <option name="PLACE_SELF_TYPE_ON_NEW_LINE" value="false" />
         </ScalaCodeStyleSettings>
         <XML>
           <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
@@ -18,8 +19,10 @@
           <option name="BLANK_LINES_AROUND_METHOD_IN_INTERFACE" value="0" />
           <option name="SPACE_WITHIN_METHOD_CALL_PARENTHESES" value="true" />
           <option name="PREFER_PARAMETERS_WRAP" value="true" />
+          <option name="METHOD_CALL_CHAIN_WRAP" value="1" />
           <option name="KEEP_SIMPLE_BLOCKS_IN_ONE_LINE" value="true" />
           <option name="KEEP_SIMPLE_METHODS_IN_ONE_LINE" value="true" />
+          <option name="WRAP_LONG_LINES" value="true" />
         </codeStyleSettings>
       </value>
     </option>
