@@ -3,7 +3,7 @@ package hw_7
 import utils.{FunctionSystems, BigDecimalSymbolicVariables}
 
 
-object hw_7_3 extends App with BigDecimalSymbolicVariables with FunctionSystems {
+object hw_7_4 extends App with BigDecimalSymbolicVariables with FunctionSystems {
   type function = StereoDistance
   case class StereoDistance(
                              //                                    Z: Dim = (p: perspectiveProjection) => p.X * p.f /
