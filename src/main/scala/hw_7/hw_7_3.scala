@@ -5,7 +5,7 @@ import scalala.tensor.domain.DomainException
 import utils.{MatrixSymbolicVariables, BigDecimalSymbolicVariables}
 
 
-object hw_7_2 extends App with MatrixSymbolicVariables {
+object hw_7_3 extends App with MatrixSymbolicVariables {
   "I" =: DenseMatrix(bd(2, 0, 2), bd(4, 100, 102), bd(2, 4, 2))
   "g" =: DenseMatrix(bd(-1, 0, 1))
   def get(m: bd, x: Int, y: Int): BigDecimal = {
