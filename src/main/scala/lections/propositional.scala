@@ -5,7 +5,7 @@ import utils.SymbolicVariables
 object propositional extends App with SymbolicVariables {
   type bd = Var
 
-  override def default = (v) => VarConst(Symbol(v))
+  override def default = (v) => () => VarConst(Symbol(v))
 
   sealed trait Var {
     def ==>(r: Var) = new ==>(this, r)
