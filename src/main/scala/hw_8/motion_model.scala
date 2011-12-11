@@ -22,6 +22,7 @@ object motion_model extends App with BigDecimalSymbolicVariables {
     'x =: 0.v
     'y =: 10.v
     'theta =: Pi.v / 4
+    'w =: -Pi.v / 4
     'x1.l
     'y1.l
     'theta1.l
