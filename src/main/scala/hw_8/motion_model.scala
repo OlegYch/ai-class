@@ -1,6 +1,7 @@
 package hw_8
 
 import utils.BigDecimalSymbolicVariables
+import scala.math.BigDecimal.RoundingMode
 
 object motion_model extends App with BigDecimalSymbolicVariables {
 
@@ -26,6 +27,25 @@ object motion_model extends App with BigDecimalSymbolicVariables {
     'x1.l
     'y1.l
     'theta1.l
+
+    'x =: 0.v
+    'y =: 0.v
+    'theta =: 0.v
+    't =: 4.v
+    'v =: 10.v
+    'w =: Pi.v / 8
+    'T =: 0.v
+    while ('T < 16.v) {
+      'T =:: 'T + 't
+      'x =:: 'x1.bd
+      'y =:: 'y1.bd
+      'theta =:: 'theta1.bd
+      "theta/pi" =:: 'theta / Pi
+    }
   }
+
   f
+  override def log(s: Variable, b: motion_model.bd) = {
+    super.log(s, b.setScale(3, RoundingMode.HALF_UP))
+  }
 }

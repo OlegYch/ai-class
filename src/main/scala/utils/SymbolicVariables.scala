@@ -23,6 +23,13 @@ trait SymbolicVariables {
   var variables = Map[Variable, () => bd]().withDefault(default)
 
   implicit def withAssignmentFromVariable(v: Variable) = withAssignmentFromValue(fromVars(v))
+  implicit def withStrictAssignmentFromVariable(v: Variable) = withStrictAssignmentFromValue(fromVars(v))
+
+  implicit def withStrictAssignmentFromValue(b: bd): {def =::(s: Variable): Variable} = new {
+    def =::(s: Variable): Variable = {
+      s =: b
+    }
+  }
 
   implicit def withAssignmentFromValue(b: => bd): {def =:(s: Variable): Variable} = new {
     def =:(s: Variable) = {
