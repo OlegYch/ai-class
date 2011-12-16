@@ -41,6 +41,7 @@
     <orderEntry type="library" name="jline_jline_0.9.94" level="project" />
     <orderEntry type="library" name="org.scalatest_scalatest_2.9.1_1.6.1" level="project" />
     <orderEntry type="library" name="junit_junit_4.8.1" level="project" />
+    <orderEntry type="library" name="net.virtualvoid_scala-enhanced-strings_2.9.1_0.5.2" level="project" />
   </component>
 </module>
 
