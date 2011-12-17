@@ -17,8 +17,8 @@ object hw_7_4 extends App with BigDecimalSymbolicVariables with FunctionSystems 
                              ) extends FunctionSystem
 
   def m = bd(1)
-  def cm = bd(100)
-  def mm = bd(1000)
+  def cm = m / bd(100)
+  def mm = m / bd(1000)
   "Z cm" =: StereoDistance(f = 8 * mm, x1 = -1 * mm, x2 = 3 * mm, B = 20 * cm).Z / cm
   "deltaX mm" =: StereoDistance(Z = 10 * m, f = 30 * mm, B = 1 * m).deltaX / mm
   "f mm" =: StereoDistance(Z = 100 * m, deltaX = 1 * mm, B = 0.5 * m).f / mm

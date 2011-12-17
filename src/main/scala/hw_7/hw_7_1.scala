@@ -16,7 +16,7 @@ object hw_7_1 extends App with BigDecimalSymbolicVariables with FunctionSystems 
                                     Z: Dim = (p: perspectiveProjection) => p.X * p.f / p.x
                                     ) extends FunctionSystem
   def m = bd(1)
-  def mm = bd(1000)
+  def mm = m / bd(1000)
   "X m" =: perspectiveProjection(Z = 300 * m, f = 100 * mm, x = 1 * mm).X / m
   "Z m" =: perspectiveProjection(X = 2 * m, f = 40 * mm, x = 1 * mm).Z / m
   "f mm" =: perspectiveProjection(X = 20 * m, Z = 400 * m, x = 1 * mm).f / mm

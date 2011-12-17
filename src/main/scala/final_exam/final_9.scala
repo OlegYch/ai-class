@@ -8,7 +8,7 @@ class final_9 extends FunSuite {
   import hw_7.hw_7_1._
 
   implicit def toDim(i: Int): Dim = i * m
-  implicit def toDim(i: Symbol): Dim = Left(i.bd)
+  implicit def toDim(i: Symbol): Dim = i.bd
 
   case class ProjectionAssertion(modification: bd => bd, function: bd => bd, initial: bd = 100) {
     val before = function(initial)
