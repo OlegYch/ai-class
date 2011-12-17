@@ -1,9 +1,13 @@
 package hw_7
 
 import utils.{FunctionSystems, BigDecimalSymbolicVariables}
+import scala.math.BigDecimal.RoundingMode
 
 
 object hw_7_1 extends App with BigDecimalSymbolicVariables with FunctionSystems {
+  def rnd = (math.random * m).setScale(2, RoundingMode.HALF_UP) * 10
+  override def default = (v) => () => v =: rnd
+
   type function = perspectiveProjection
   case class perspectiveProjection(
                                     x: Dim = (p: perspectiveProjection) => p.X * p.f / p.Z,
