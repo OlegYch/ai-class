@@ -37,6 +37,9 @@ class particle_filter extends FunSuite with BigDecimalSymbolicVariables {
     assert("b2".bd.setScale(3, HALF_UP) === 0.842.v)
     assert("a2".bd.setScale(3, HALF_UP) === 0.053.v)
   }
+  def rounded(s: String): BigDecimal = {
+    s.bd.setScale(3, HALF_UP)
+  }
   test("hw8_5") {
     "p(W|black)" =: 1.v - ("p(B|black)" =: 0.8.v)
     "p(W|white)" =: 1.v - ("p(B|white)" =: 0.1.v)
@@ -48,8 +51,8 @@ class particle_filter extends FunSuite with BigDecimalSymbolicVariables {
     "b3" =: whiteParticles.dequeue().bd + whiteParticles.dequeue()
     "b4" =: blackParticles.map(_.bd).sum
     "c4" =: whiteParticles.dequeue().bd
-    assert("b3".bd.setScale(3, HALF_UP) === 0.581.v)
-    assert("b4".bd.setScale(3, HALF_UP) === 0.129.v)
-    assert("c4".bd.setScale(3, HALF_UP) === 0.290.v)
+    assert(rounded("b3") === 0.581.v)
+    assert(rounded("b4") === 0.129.v)
+    assert(rounded("c4") === 0.290.v)
   }
 }
