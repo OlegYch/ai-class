@@ -19,3 +19,7 @@ libraryDependencies += "junit" % "junit" % "4.8.1" % "compile"
 autoCompilerPlugins := true
 
 libraryDependencies += "net.virtualvoid" %% "scala-enhanced-strings" % "0.5.2" % "compile;plugin->default(compile)"
+
+libraryDependencies += "org.apache.poi" % "poi" % "3.8-beta5"
+
+libraryDependencies += "org.springframework" % "spring-core" % "3.1.0.RELEASE"
