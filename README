@@ -1,1 +1,3 @@
-This file was created by IntelliJ IDEA (Nika) IU-110.365 for binding GitHub repository
+Most of ai-class 2011 solutions (which benefited from coding).
+To run final scores analysis use xsbt.sh/xsbt.cmd and enter "run-main scores.analyzes" (requires bash and jre).
+Download the latest scores stats from https://docs.google.com/spreadsheet/ccc?key=0AsWh-4U3WvLRdFdrQ1BjcnRwY29NYVl0OUpXT0s5X1E&hl=en_US#gid=0
