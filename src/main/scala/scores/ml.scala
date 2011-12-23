@@ -33,7 +33,7 @@ class ml(scores: Seq[Score]) {
     val norm: mt = norm(x)
   }
   val xs = withIntercept(normalized.norm)
-  var theta = DenseVector[Double](Seq.fill(xs.numCols)(math.random):_*).asRow
+  var theta = DenseVector(Seq.fill(xs.numCols)(0.0):_*).asRow
   val iters = 50
   var alpha = 10.0
   var lastCost = 0.0
