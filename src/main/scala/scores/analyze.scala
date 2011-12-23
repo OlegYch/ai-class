@@ -38,8 +38,9 @@ object analyze extends App {
     lazy val hws = (1 to 8).map(n => computeSafely("HW#n")(BigDecimal(_)))
     lazy val midterm = computeSafely("Midterm")(BigDecimal(_))
     lazy val finalGrade = computeSafely("Final")(BigDecimal(_))
-    lazy val otherCourses = computeSafely("Attended other online Stanford courses (ML, DB...)?") {v =>
-      Seq("ml", "db").map(c => c -> v.toLowerCase.contains(c)).toMap
+    lazy val otherCourses = computeSafely("Attended other online Stanford courses (ML, DB...)?") {
+      v =>
+        Seq("ml", "db").map(c => c -> v.toLowerCase.contains(c)).toMap
     }(default = Map())
     lazy val score = Feature("Score", scale(midterm * 0.3 + finalGrade * 0.4 + average(hws.map(_.value).sorted
       .drop(2)) * 0.3))
@@ -63,7 +64,8 @@ object analyze extends App {
       Seq[Feature[Double]](
         score.score
         , age
-        //        , Feature("CountrySum", country.toCharArray.sum.toDouble)
+        , Feature("Age^2", age.value.pow(2))
+        , Feature("CountrySum", country.toCharArray.sum.toDouble)
         , midterm
         , finalGrade
         , Feature("Courses N", otherCourses.count(_._2 == true).toDouble)) ++

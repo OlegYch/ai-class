@@ -1,19 +1,21 @@
 package scores
 
 
-import scalala.tensor.::;
-import scalala.tensor.mutable._;
-import scalala.tensor.dense._;
+import scalala.tensor.::
+import scalala.tensor.mutable._
+import scalala.tensor.dense._
 
 import scalala.library.Numerics
 import scores.analyze.{Score, Offer}
 import scalala.tensor.domain.IndexDomain
 import scalala.library.Library._
-;
+import scalala.library.LinearAlgebra._
+import scalala.library.Plotting._
+import scala.math.BigDecimal.RoundingMode
 
 class ml(scores: Seq[Score]) {
   val offers = scores.map(Offer(_))
-  val trainingSet = DenseMatrix(offers.map(_.x): _*)
+  val trainingSet: mt = DenseMatrix(offers.map(_.x): _*)
   val normalized = normalize(trainingSet)
   val ys = DenseMatrix(DenseVector(offers.map(_.y): _*).asRow)
   val m = scores.size
@@ -31,19 +33,33 @@ class ml(scores: Seq[Score]) {
     val norm: mt = norm(x)
   }
   val xs = withIntercept(normalized.norm)
-  var theta = DenseVectorRow[Double](IndexDomain(xs.numCols))
-  val iters = 500
-  val alpha = 0.1
+  var theta = DenseVector[Double](Seq.fill(xs.numCols)(math.random):_*).asRow
+  val iters = 50
+  var alpha = 10.0
+  var lastCost = 0.0
   def hTest(x: mt): mt = h(withIntercept(normalized.norm(x)))
   def h: mt = h(xs)
   private def h(xs: mt): mt = (DenseMatrix(theta) * xs.t).mapValues(Numerics.sigmoid)
-  (0 to iters).foreach {_ =>
+  val costs = (0 to iters).map {i =>
     val hh = h
+    val positiveCost :mt = -ys :* hh.mapValues(log)
+    val negativeCost: mt = (-ys :+ 1) :* (-hh :+ 1).mapValues(log)
+    val cost:Double = (positiveCost - negativeCost).sum / m
+    if (!cost.isInfinite){
+      println(BigDecimal(cost).setScale(8, RoundingMode.HALF_UP))
+      if (lastCost < cost) {
+        alpha = alpha * 0.9
+      }
+      lastCost = cost
+    }
     val deltaTheta: mt = hh - ys
-    val cost = (-ys :* hh.mapValues(log) - (-ys :+ 1) :* (-hh :+ 1).mapValues(log)).sum * (1.0 / m)
-    println(cost)
     theta = theta.mapPairs((i: Int, d: Double) =>
       theta(i) - alpha / m * (deltaTheta :* DenseMatrix(xs(::, i).asRow)).sum)
-  }
-  println(theta)
+    (i, cost)
+  }.filterNot(_._2.isInfinite).toArray
+  println((Seq("X0") ++ Offer(scores(0)).features.map(_.label)).mkString("  \t"))
+  println(theta.values.toSeq.map(BigDecimal(_).setScale(3, RoundingMode.HALF_UP)).mkString("\t"))
+  plot(costs.map(_._1), costs.map(_._2))
+//  val normal = inv(trainingSet.t * trainingSet) * trainingSet * ys
+//  println(normal)
 }
