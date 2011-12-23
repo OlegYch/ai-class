@@ -49,18 +49,24 @@ object analyze extends App {
       case (_, scores) => scores.map(s => (s.score, s.valsByNameNotEmpty)).mkString("\n")
     }.mkString("\n"))
     println(withOffer.size)
+    println(new ml(scores) {
+    }.withIntercept)
   }
 
   case class Score(values: Seq[String])(headers: Seq[String]) {
     lazy val valsByName = TreeMap(headers.zip(values): _*).filterNot(_._2.startsWith("="))
     lazy val valsByNameNotEmpty = valsByName.filter(_._2 != "empty")
+    lazy val country = computeSafely(valsByName("Country").toLowerCase)(default = "")
     lazy val age = scale(computeSafely(BigDecimal(valsByName("Age"))), scale = 0)
     lazy val gotOffer = computeSafely(valsByName("Got the \"recruitment\" email that everybody is talking about? " +
       "(Bold if Yes)")
       .toLowerCase.contains("yes"))(default = false)
-    lazy val score = scale(computeSafely(BigDecimal(valsByName("Midterm")) * 0.3 +
-      BigDecimal(valsByName("Final")) * 0.4 +
-      average(valsByName.from("HW1").to("HW8").values.map(BigDecimal(_)).toSeq.sorted.drop(2)) * 0.3))
+    lazy val hws = valsByName.from("HW1").to("HW8").values.map(v => computeSafely(BigDecimal(v))).toSeq
+    lazy val midterm = computeSafely(BigDecimal(valsByName("Midterm")))
+    lazy val finalGrade = computeSafely(BigDecimal(valsByName("Final")))
+    lazy val score = {
+      scale(midterm * 0.3 + finalGrade * 0.4 + average(hws.sorted.drop(2)) * 0.3)
+    }
 
     implicit val defaultBigDecimal = BigDecimal(0)
     def computeSafely[T](decimal1: => T)(implicit default: T): T = {
@@ -69,5 +75,11 @@ object analyze extends App {
 
     def scale(b: BigDecimal, scale: Int = 3) = b.setScale(scale, RoundingMode.HALF_UP)
     def average(l: Seq[BigDecimal]) = l.sum / l.size
+  }
+  case class Offer(score: Score) {
+    implicit def toDouble(b: BigDecimal) = b.toDouble
+    val x = Array[Double]((Seq(score.score, score.age, BigDecimal(score.country.sum), score.midterm, score
+      .finalGrade) ++ score.hws).map(toDouble): _*)
+    val y: Double = if (score.gotOffer) 1.0 else 0.0
   }
 }

@@ -26,7 +26,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="org.scala-lang_scala-library_2.9.1" level="project" />
     <orderEntry type="library" name="commons-lang_commons-lang_2.5" level="project" />
-    <orderEntry type="library" name="org.scalala_scalala_2.9.1_1.0.0.RC2-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="org.scalala_scalala_2.9.1_1.0.0.RC2" level="project" />
     <orderEntry type="library" name="com.googlecode.netlib-java_netlib-java_0.9.3" level="project" />
     <orderEntry type="library" name="net.sourceforge.f2j_arpack_combined_all_0.1" level="project" />
     <orderEntry type="library" name="jfree_jcommon_1.0.16" level="project" />
