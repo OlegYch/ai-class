@@ -1,5 +1,10 @@
 Most of ai-class 2011 solutions (which benefited from coding).
 Requires bash and java 6.
-To run final scores analysis use xsbt.sh/xsbt.cmd and enter "run-main scores.analyze".
-This will launch code in src/main/scala/scores/analyze and output
-Download the latest scores stats from https://docs.google.com/spreadsheet/ccc?key=0AsWh-4U3WvLRdFdrQ1BjcnRwY29NYVl0OUpXT0s5X1E&hl=en_US#gid=0
+
+To run final scores analysis execute xsbt.sh/xsbt.cmd and enter "run-main scores.analyze".
+This will fetch necessary dependencies, compile and launch code in src/main/scala/scores/analyze,
+which will try to fit regularized logistic regression and output some statistics.
+
+Download the latest scores stats from
+https://docs.google.com/spreadsheet/ccc?key=0AsWh-4U3WvLRdFdrQ1BjcnRwY29NYVl0OUpXT0s5X1E&hl=en_US#gid=0
+and put it in src/main/resources.
