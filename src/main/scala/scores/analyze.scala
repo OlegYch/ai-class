@@ -16,7 +16,8 @@ object analyze extends App {
   println(withOffer.size)
   val ml = new ml(scores)
   def test(scores: IndexedSeq[Score]) {
-    println(scores.view.map(Offer(_)).map(o => (ml.hTest(DenseMatrix(o.x)), o.features)).mkString("\n"))
+    println(scores.view.map(Offer(_)).map(o =>
+      ("Likelihood to get the email " + ml.hTest(DenseMatrix(o.x)), "For " + o.features)).mkString("\n"))
   }
   test(withOffer)
   test(scores.take(10))
@@ -38,12 +39,11 @@ object analyze extends App {
     lazy val hws = (1 to 8).map(n => computeSafely("HW#n")(BigDecimal(_)))
     lazy val midterm = computeSafely("Midterm")(BigDecimal(_))
     lazy val finalGrade = computeSafely("Final")(BigDecimal(_))
-    lazy val otherCourses = computeSafely("Attended other online Stanford courses (ML, DB...)?") {
-      v =>
-        Seq("ml", "db").map(c => c -> v.toLowerCase.contains(c)).toMap
+    lazy val otherCourses = computeSafely("Attended other online Stanford courses (ML, DB...)?") {v =>
+      Seq("ml", "db").map(c => c -> v.toLowerCase.contains(c)).toMap
     }(default = Map())
-    lazy val score = Feature("Score", scale(midterm * 0.3 + finalGrade * 0.4 + average(hws.map(_.value).sorted
-      .drop(2)) * 0.3))
+    lazy val score = Feature("Score",
+      scale(midterm * 0.3 + finalGrade * 0.4 + average(hws.map(_.value).sorted.drop(2)) * 0.3))
 
     implicit val defaultBigDecimal = BigDecimal(0)
     def computeSafely[T](name: String)(transformer: String => T)(implicit default: T): Feature[T] = {

@@ -47,7 +47,7 @@ class ml(scores: Seq[Score]) {
     val negativeCost: mt = (-ys :+ 1) :* (-hh :+ 1).mapValues(log)
     val cost: Double = (positiveCost - negativeCost).sum / m + (lambda :* (theta :^ 2)).sum / (2 * m)
     if (!cost.isInfinite) {
-      println(BigDecimal(cost).setScale(8, RoundingMode.HALF_UP))
+      println("Current cost " + BigDecimal(cost).setScale(8, RoundingMode.HALF_UP))
       if (lastCost < cost) {
         alpha *= 0.9
         lambda /= (1 / 0.9)
@@ -60,8 +60,12 @@ class ml(scores: Seq[Score]) {
       theta(i) - (alpha / m * (deltaTheta :* DenseMatrix(xs(::, i).asRow)).sum) + lambda(i) * theta(i) / m)
     (i, cost)
   }.filterNot(_._2.isInfinite).toArray
+  println("Final weights for features:")
   println((Seq("X0") ++ Offer(scores(0)).features.map(_.label)).mkString("  \t"))
   println(theta.values.toSeq.map(BigDecimal(_).setScale(3, RoundingMode.HALF_UP)).mkString("\t"))
+  println("See cost plot, close the window to exit")
+  xlabel("Iteration")
+  ylabel("Cost")
   plot(costs.map(_._1), costs.map(_._2))
   //  val normal = inv(trainingSet.t * trainingSet) * trainingSet * ys
   //  println(normal)
