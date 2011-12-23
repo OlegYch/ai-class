@@ -5,9 +5,10 @@ import scalala.tensor.::;
 import scalala.tensor.mutable._;
 import scalala.tensor.dense._;
 
-import scalala.library.Library._
+import scalala.library.Numerics
 import scores.analyze.{Score, Offer}
 import scalala.tensor.domain.IndexDomain
+import scalala.library.Library._
 ;
 
 class ml(scores: Seq[Score]) {
@@ -32,13 +33,15 @@ class ml(scores: Seq[Score]) {
   val alpha = 0.05
   def h(x: mt): mt = DenseMatrix(theta) * withIntercept(DenseMatrix(normalize(DenseMatrix
     .vertcat(x, trainingSet))(0, ::))).t
-  def h: mt = (DenseMatrix(theta) * xs.t)
+  def h: mt = (DenseMatrix(theta) * xs.t).mapValues(Numerics.sigmoid)
   (0 to iters).foreach {_ =>
-    val deltaTheta: mt = h - ys
-    val cost = (deltaTheta :^ 2).sum * (1.0 / 2 / m);
+    val hh = h
+    val deltaTheta: mt = hh - ys
+    val cost = (-ys :* hh.mapValues(log) - (-ys :+ 1) :* (-hh :+ 1).mapValues(log)).sum * (1.0 / m);
     println(cost)
-    theta = theta.mapPairs((i: Int, d: Double) => theta(i) - alpha / m * (deltaTheta :* DenseMatrix(xs(::, i).asRow))
-      .sum)
+    theta = theta.mapPairs((i: Int, d: Double) =>
+      theta(i) - alpha / m * (deltaTheta :* DenseMatrix(xs(::, i).asRow))
+        .sum)
   }
   println(theta)
 }
