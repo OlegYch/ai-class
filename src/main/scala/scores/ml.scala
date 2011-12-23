@@ -12,11 +12,12 @@ import scalala.tensor.domain.IndexDomain
 
 class ml(scores: Seq[Score]) {
   val offers = scores.map(Offer(_))
-  val normalized = normalize(DenseMatrix(offers.map(_.x): _*))
+  val trainingSet = DenseMatrix(offers.map(_.x): _*)
+  val normalized = normalize(trainingSet)
   val ys = DenseMatrix(DenseVector(offers.map(_.y): _*).asRow)
   val m = normalized.numRows
-  val withIntercept = {
-    DenseMatrix.horzcat(DenseMatrix.ones[Double](m, 1), normalized)
+  def withIntercept(normalized: mt) = {
+    DenseMatrix.horzcat(DenseMatrix.ones[Double](normalized.numRows, 1), normalized)
   }
 
   type mt = Matrix[Double]
@@ -25,16 +26,19 @@ class ml(scores: Seq[Score]) {
     val sigma = DenseVector((0 until x_norm.numCols).map(c => x_norm(::, c).stddev): _*)
     x_norm :/ DenseMatrix(Seq.fill(x.numRows)(sigma.asRow): _*)
   }
-  var theta = DenseVectorRow[Double](IndexDomain(normalized.numCols))
-  val iters = 10000
+  val xs = withIntercept(normalized)
+  var theta = DenseVectorRow[Double](IndexDomain(xs.numCols))
+  val iters = 100
   val alpha = 0.05
+  def h(x: mt): mt = DenseMatrix(theta) * withIntercept(DenseMatrix(normalize(DenseMatrix
+    .vertcat(x, trainingSet))(0, ::))).t
+  def h: mt = (DenseMatrix(theta) * xs.t)
   (0 to iters).foreach {_ =>
-    val h = DenseMatrix(theta) * normalized.t
     val deltaTheta: mt = h - ys
     val cost = (deltaTheta :^ 2).sum * (1.0 / 2 / m);
     println(cost)
-    theta = theta.mapPairs((i: Int, d: Double) => theta(i) - alpha / m * (deltaTheta :* DenseMatrix(normalized(::, i)
-      .asRow)).sum)
+    theta = theta.mapPairs((i: Int, d: Double) => theta(i) - alpha / m * (deltaTheta :* DenseMatrix(xs(::, i).asRow))
+      .sum)
   }
   println(theta)
 }

@@ -6,6 +6,7 @@ import scala.collection.immutable.TreeMap
 import org.apache.poi.hssf.usermodel.{HSSFSheet, HSSFWorkbook}
 import org.apache.poi.ss.util.CellUtil
 import scala.math.BigDecimal.RoundingMode
+import scalala.tensor.dense.DenseMatrix
 
 @EnhanceStrings
 object analyze extends App {
@@ -49,8 +50,9 @@ object analyze extends App {
       case (_, scores) => scores.map(s => (s.score, s.valsByNameNotEmpty)).mkString("\n")
     }.mkString("\n"))
     println(withOffer.size)
-    println(new ml(scores) {
-    }.withIntercept)
+    val ml = new ml(scores)
+    println(withOffer.map(o => ml.h(DenseMatrix(Offer(o).x))).mkString("\n"))
+    println(scores.take(10).map(o => ml.h(DenseMatrix(Offer(o).x))).mkString("\n"))
   }
 
   case class Score(values: Seq[String])(headers: Seq[String]) {
