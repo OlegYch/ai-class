@@ -16,24 +16,27 @@ class ml(scores: Seq[Score]) {
   val trainingSet = DenseMatrix(offers.map(_.x): _*)
   val normalized = normalize(trainingSet)
   val ys = DenseMatrix(DenseVector(offers.map(_.y): _*).asRow)
-  val m = normalized.numRows
+  val m = scores.size
   def withIntercept(normalized: mt) = {
     DenseMatrix.horzcat(DenseMatrix.ones[Double](normalized.numRows, 1), normalized)
   }
 
   type mt = Matrix[Double]
-  def normalize(x: mt): mt = {
-    val x_norm: mt = x - DenseMatrix(Seq.fill(x.numRows)(mean(x, Axis.Vertical).asRow): _*)
+  def normalize(x: mt) = new {
+    val mu = mean(x, Axis.Vertical).asRow
+    def x_norm(x: mt): mt = x - DenseMatrix(Seq.fill(x.numRows)(mu): _*)
+    val x_norm: mt = x_norm(x)
     val sigma = DenseVector((0 until x_norm.numCols).map(c => x_norm(::, c).stddev): _*)
-    x_norm :/ DenseMatrix(Seq.fill(x.numRows)(sigma.asRow): _*)
+    def norm(x: mt): mt = x_norm(x) :/ DenseMatrix(Seq.fill(x.numRows)(sigma.asRow): _*)
+    val norm: mt = norm(x)
   }
-  val xs = withIntercept(normalized)
+  val xs = withIntercept(normalized.norm)
   var theta = DenseVectorRow[Double](IndexDomain(xs.numCols))
-  val iters = 1000
-  val alpha = 0.05
-  def h(x: mt): mt = DenseMatrix(theta) * withIntercept(DenseMatrix(normalize(DenseMatrix
-    .vertcat(x, trainingSet))(0, ::))).t
-  def h: mt = (DenseMatrix(theta) * xs.t).mapValues(Numerics.sigmoid)
+  val iters = 500
+  val alpha = 0.1
+  def hTest(x: mt): mt = h(withIntercept(normalized.norm(x)))
+  def h: mt = h(xs)
+  private def h(xs: mt): mt = (DenseMatrix(theta) * xs.t).mapValues(Numerics.sigmoid)
   (0 to iters).foreach {_ =>
     val hh = h
     val deltaTheta: mt = hh - ys
