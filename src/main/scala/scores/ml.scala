@@ -29,7 +29,7 @@ class ml(scores: Seq[Score]) {
   }
   val xs = withIntercept(normalized)
   var theta = DenseVectorRow[Double](IndexDomain(xs.numCols))
-  val iters = 100
+  val iters = 1000
   val alpha = 0.05
   def h(x: mt): mt = DenseMatrix(theta) * withIntercept(DenseMatrix(normalize(DenseMatrix
     .vertcat(x, trainingSet))(0, ::))).t
@@ -37,11 +37,10 @@ class ml(scores: Seq[Score]) {
   (0 to iters).foreach {_ =>
     val hh = h
     val deltaTheta: mt = hh - ys
-    val cost = (-ys :* hh.mapValues(log) - (-ys :+ 1) :* (-hh :+ 1).mapValues(log)).sum * (1.0 / m);
+    val cost = (-ys :* hh.mapValues(log) - (-ys :+ 1) :* (-hh :+ 1).mapValues(log)).sum * (1.0 / m)
     println(cost)
     theta = theta.mapPairs((i: Int, d: Double) =>
-      theta(i) - alpha / m * (deltaTheta :* DenseMatrix(xs(::, i).asRow))
-        .sum)
+      theta(i) - alpha / m * (deltaTheta :* DenseMatrix(xs(::, i).asRow)).sum)
   }
   println(theta)
 }

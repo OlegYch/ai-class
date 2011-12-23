@@ -51,8 +51,11 @@ object analyze extends App {
     }.mkString("\n"))
     println(withOffer.size)
     val ml = new ml(scores)
-    println(withOffer.map(o => ml.h(DenseMatrix(Offer(o).x))).mkString("\n"))
-    println(scores.take(10).map(o => ml.h(DenseMatrix(Offer(o).x))).mkString("\n"))
+    def test(scores: IndexedSeq[Score]) {
+      println(scores.map(o => (ml.h(DenseMatrix(Offer(o).x)), o.valsByNameNotEmpty)).mkString("\n"))
+    }
+    test(withOffer)
+    test(scores.take(10))
   }
 
   case class Score(values: Seq[String])(headers: Seq[String]) {
